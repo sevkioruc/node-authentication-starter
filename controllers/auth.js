@@ -52,6 +52,11 @@ exports.verifyUser = async (req, res, next) => {
 	}
 }
 
+exports.logout = (req, res, next) => {
+	req.logout()
+	res.status(200).send({ msg: 'log out' })
+}
+
 exports.whoami = (req, res, next) => {
 	return res.json({ username: req.user.username })
 }

@@ -7,10 +7,15 @@ const userSchema = new mongoose.Schema({
 		unique: true,
 		required: true
 	},
+	email: {
+		type: String,
+		require: true,
+		unique: true
+	},
 	password: {
 		type: String,
 		required: true
-	}
+	},
 })
 
 async function generateHash(password) {

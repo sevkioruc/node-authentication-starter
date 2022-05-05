@@ -1,4 +1,6 @@
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const config = require('../config')
 
 exports.register = async (req, res) => {
 	try {
@@ -19,5 +21,21 @@ exports.register = async (req, res) => {
 	}
 }
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
+	try {
+		const token = jwt.sign(
+			{
+				userId: req.user.id
+			},
+			config.JWT_SECRET,
+			{ expiresIn: '24h' }
+		)
+		return res.json({ jwt: token })
+	} catch (err) {
+		return next(err)
+	}
+}
+
+exports.whoami = (req, res, next) => {
+	return res.json({ username: req.user.username })
 }

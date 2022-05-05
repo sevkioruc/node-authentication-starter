@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
 
 const userSchema = new mongoose.Schema({
 	username: {
@@ -15,6 +16,17 @@ const userSchema = new mongoose.Schema({
 	password: {
 		type: String,
 		required: true
+	},
+	verified: {
+		type: Boolean,
+		default: false,
+	},
+	verificationToken: {
+		type: String,
+		required: true,
+		index: true,
+		unique: true,
+		default: () => crypto.randomBytes(20).toString('hex'),
 	},
 })
 

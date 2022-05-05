@@ -37,6 +37,21 @@ exports.login = async (req, res, next) => {
 	}
 }
 
+exports.verifyUser = async (req, res, next) => {
+	try {
+		const user = await User.findById(req.params.userId)
+		if (!user || user.verificationToken !== req.params.token) {
+			res.status(401).send({ msg: 'you do not have authority for this operation' })
+		} else {
+			user.verified = true
+			await user.save()
+			res.status(200).send({ msg: 'user was verified successfully' })
+		}
+	} catch {
+
+	}
+}
+
 exports.whoami = (req, res, next) => {
 	return res.json({ username: req.user.username })
 }

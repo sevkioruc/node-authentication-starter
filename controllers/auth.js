@@ -1,6 +1,7 @@
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const config = require('../config')
+const { transporter } = require('../services/emailService')
 
 exports.register = async (req, res) => {
 	try {
@@ -13,6 +14,15 @@ exports.register = async (req, res) => {
 			username: req.body.username,
 			password: req.body.password,
 			email: req.body.email
+		})
+
+		const userVerificationLink = `http://${config.BASE_URL}/v1/auth/verify/${user._id}/${user.verificationToken}`
+
+		await transporter.sendMail({
+			from: config.AUTH_EMAIL,
+			to: user.email,
+			subject: 'User Verification',
+			html: "Hello,<br> Please Click on the link to verify your email.<br><a href=" + userVerificationLink + ">Click here to verify</a>"
 		})
 
 		await user.save()

@@ -47,7 +47,7 @@ exports.verifyUser = async (req, res, next) => {
 		} else {
 			user.verified = true
 			await user.save()
-			res.status(200).send({ msg: 'user was verified successfully' })
+			res.render('./user_verification_success.ejs', { username: user.username })
 		}
 	} catch {
 
